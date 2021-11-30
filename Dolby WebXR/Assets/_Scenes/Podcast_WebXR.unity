@@ -768,12 +768,12 @@ PrefabInstance:
     - target: {fileID: 4071266503217718250, guid: 5ffeec0e302241d41a727e6bc13c3f52,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 2.8180974e+20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4071266503217718250, guid: 5ffeec0e302241d41a727e6bc13c3f52,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4071266503217718250, guid: 5ffeec0e302241d41a727e6bc13c3f52,
         type: 3}
@@ -2889,7 +2889,6 @@ GameObject:
   - component: {fileID: 1709965678}
   - component: {fileID: 1709965677}
   - component: {fileID: 1709965676}
-  - component: {fileID: 1709965679}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -2945,32 +2944,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1709965679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1709965675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b98ba066fd33ded4aa6474529973e6fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectedHand: 1
-  LeftPointerTransform: {fileID: 0}
-  RightPointerTransform: {fileID: 0}
-  ControllerInput: 0f000000
-  UIInputAction: {fileID: -6728727643101440195, guid: e39f4b35a6db18348b41eb0262520e69,
-    type: 3}
-  AddPhysicsRaycaster: 0
-  PhysicsRaycasterEventMask:
-    serializedVersion: 2
-    m_Bits: 0
-  RightThumbstickScroll: 1
-  PressingObject: {fileID: 0}
-  DraggingObject: {fileID: 0}
-  ReleasingObject: {fileID: 0}
 --- !u!1 &1734972090 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a13b59c14bc184148a3d376dfc241e21,
