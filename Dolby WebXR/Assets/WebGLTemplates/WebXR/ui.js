@@ -12,8 +12,9 @@ const createConference = (conferenceAlias) => {
         .then((conference) => VoxeetSDK.conference.join(conference, {}))
         .then(() => {
             alert("Created Conference");
+            return;
         })
-        .catch((err) => console.error(err));
+        .catch((err) => { console.error(err); return; });
 }
 
 const joinConference = (conferenceAlias) => {
