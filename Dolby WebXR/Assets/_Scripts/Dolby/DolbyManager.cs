@@ -26,6 +26,8 @@ public class DolbyManager : MonoBehaviour
     [SerializeField] private Button joinButton;
     [SerializeField] private Button leaveButton;
 
+    [SerializeField] private EnvironmentSwitcher envSwitcher;
+
     private void Start()
     {
         leaveButton.gameObject.SetActive(false);
@@ -47,13 +49,13 @@ public class DolbyManager : MonoBehaviour
     {
         if (conferenceNameInput.text != "")
         {
-            Create(conferenceNameInput.text);
-
             createButton.gameObject.SetActive(false);
             joinButton.gameObject.SetActive(false);
             leaveButton.gameObject.SetActive(true);
 
-            EnvironmentSwitcher.Singleton.ToggleGroup(EnvironmentSwitcher.EnviromentGroupName.Host);
+            envSwitcher.ToggleGroup(EnvironmentSwitcher.EnviromentGroupName.Host);
+
+            Create(conferenceNameInput.text);
         }
     }
 
@@ -61,25 +63,25 @@ public class DolbyManager : MonoBehaviour
     {
         if (conferenceNameInput.text != "")
         {
-            Join(conferenceNameInput.text);
-
             createButton.gameObject.SetActive(false);
             joinButton.gameObject.SetActive(false);
             leaveButton.gameObject.SetActive(true);
 
-            EnvironmentSwitcher.Singleton.ToggleGroup(EnvironmentSwitcher.EnviromentGroupName.Listen);
+            envSwitcher.ToggleGroup(EnvironmentSwitcher.EnviromentGroupName.Listen);
+
+            Join(conferenceNameInput.text);
         }
     }
 
     public void LeaveConference()
     {
-        Leave();
-
         leaveButton.gameObject.SetActive(false);
         createButton.gameObject.SetActive(true);
         joinButton.gameObject.SetActive(true);
 
-        EnvironmentSwitcher.Singleton.ToggleGroup(EnvironmentSwitcher.EnviromentGroupName.None);
+        envSwitcher.ToggleGroup(EnvironmentSwitcher.EnviromentGroupName.None);
+
+        Leave();
     }
 
     // Testing
@@ -92,15 +94,15 @@ public class DolbyManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.H))
         {
-            CreateConference();
+            ExecuteEnvironmentSwitch(1);
         }
         else if (Input.GetKeyDown(KeyCode.J))
         {
-            JoinConference();
+            ExecuteEnvironmentSwitch(2);
         }
         else if (Input.GetKeyDown(KeyCode.L))
         {
-            LeaveConference();
+            ExecuteEnvironmentSwitch(0);
         }
     }
     */

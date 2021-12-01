@@ -9,9 +9,9 @@ public class EnvironmentSwitcher : MonoBehaviour
 
     public enum EnviromentGroupName
     {
-        None,
-        Host,
-        Listen
+        None = 0,
+        Host = 1,
+        Listen = 2
     }
 
     [Serializable]

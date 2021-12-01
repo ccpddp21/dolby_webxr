@@ -1,17 +1,17 @@
 mergeInto(LibraryManager.library, {
 
     Init: function(nameStr) {
-        main(nameStr);
+        main(Pointer_stringify(nameStr));
         return;
     },
 
     Create: function(nameStr) {
-        createConference(nameStr);
+        createConference(Pointer_stringify(nameStr));
         return;
     },
 
     Join: function(nameStr) {
-        joinConference(nameStr);
+        joinConference(Pointer_stringify(nameStr));
         return;
     },
 
