@@ -1,7 +1,11 @@
 mergeInto(LibraryManager.library, {
 
-    Join: function() {
-        joinConference();
+    Create: function(nameStr) {
+        createConference(nameStr);
+    },
+
+    Join: function(nameStr) {
+        joinConference(nameStr);
     },
 
     Leave: function() {

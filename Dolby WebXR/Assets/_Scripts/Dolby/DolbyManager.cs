@@ -5,242 +5,62 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using TMPro;
+using UnityEngine.UI;
 
 public class DolbyManager : MonoBehaviour
 {
     [DllImport("__Internal")]
-    private static extern void Join();
+    private static extern void Create(string nameStr);
+    [DllImport("__Internal")]
+    private static extern void Join(string nameStr);
     [DllImport("__Internal")]
     private static extern void Leave();
 
-
-    [Serializable]
-    protected struct BearerAuth
-    {
-        public string token_type;
-        public string access_token;
-        public int expires_in;
-    }
-
-    [Serializable]
-    protected struct ClientAuth
-    {
-        public string token_type;
-        public string access_token;
-        public string refresh_token;
-        public int expires_in;
-    }
-
-    [Serializable]
-    protected struct ClientVerify
-    {
-        public string jwt_user_token;
-        public string user_id;
-        public string wsUri;
-    }
-
-    public static DolbyManager Singleton;
-
-    [SerializeField] private BearerAuth bearerAuth;
-    public string BearerAccessToken
-    {
-        get { return bearerAuth.access_token;  }
-    }
-
-    [SerializeField] private ClientAuth clientAuth;
-    public string ClientAccessToken
-    {
-        get {  return clientAuth.access_token; }
-    }
-
-    [SerializeField] private ClientVerify clientVerify;
-
-    private void Awake()
-    {
-        Singleton = this;
-    }
+    [SerializeField] private TMP_InputField userNameInput;
+    [SerializeField] private TMP_InputField conferenceNameInput;
+    [SerializeField] private Button createButton;
+    [SerializeField] private Button joinButton;
+    [SerializeField] private Button leaveButton;
 
     private void Start()
     {
-        //GetBearerToken();
-        //GetSessionToken();
+        leaveButton.gameObject.SetActive(false);
+        createButton.gameObject.SetActive(true);
+        joinButton.gameObject.SetActive(true);
+    }
+
+    public void CreateConference()
+    {
+        if (conferenceNameInput.text != "")
+        {
+            Create(conferenceNameInput.text);
+
+            createButton.gameObject.SetActive(false);
+            joinButton.gameObject.SetActive(false);
+            leaveButton.gameObject.SetActive(true);
+        }
     }
 
     public void JoinConference()
     {
-        Join();
+        if (conferenceNameInput.text != "")
+        {
+            Join(conferenceNameInput.text);
+
+            createButton.gameObject.SetActive(false);
+            joinButton.gameObject.SetActive(false);
+            leaveButton.gameObject.SetActive(true);
+        }
     }
 
     public void LeaveConference()
     {
         Leave();
+
+        createButton.gameObject.SetActive(false);
+        joinButton.gameObject.SetActive(false);
+        leaveButton.gameObject.SetActive(true);
     }
 
-    public async void GetBearerToken()
-    {
-        var client = new HttpClient();
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri("https://api.voxeet.com/v1/auth/token"),
-            Headers =
-            {
-                { "Accept", "application/json" },
-                { "Cache-Control", "no-cache" },
-                { "Authorization", "Basic ZFFRTVUyazJOamh3RFdET1F6T3VYUT09OktIdWw5NUZLT0RwOUNiVjlKNHNtVlZ5TmlJbHl6cERST2FuLWFKOWJvMHc9" },
-            },
-            Content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "grant_type", "client_credentials" },
-            }),
-        };
-        using (var response = await client.SendAsync(request))
-        {
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-
-            bearerAuth = JsonUtility.FromJson<BearerAuth>(body);
-        }
-    }
-
-    public async void GetSessionToken()
-    {
-        HttpClient client = new HttpClient();
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri("https://session.voxeet.com/v1/oauth2/token"),
-            Headers =
-            {
-                { "Accept", "application/json" },
-                { "Cache-Control", "no-cache" },
-                { "Authorization", "Basic ZFFRTVUyazJOamh3RFdET1F6T3VYUT09OktIdWw5NUZLT0RwOUNiVjlKNHNtVlZ5TmlJbHl6cERST2FuLWFKOWJvMHc9" },
-            },
-            Content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "grant_type", "client_credentials" },
-            }),
-        };
-        using (var response = await client.SendAsync(request))
-        {
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-
-            clientAuth = JsonUtility.FromJson<ClientAuth>(body);
-        }
-
-        // Once your app is done using the HttpClient object call dispose to 
-        // free up system resources (the underlying socket and memory used for the object)
-        client.Dispose();
-
-        VerifyClient();
-    }
-
-    private async void VerifyClient()
-    {
-        HttpClient client = new HttpClient();
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri("https://session.voxeet.com/v2/users/identify"),
-            Headers =
-            {
-                { "Accept", "application/json,text/plain,*/*" },
-                { "Cache-Control", "no-cache" },
-                { "Authorization", String.Format("Bearer {0}", DolbyManager.Singleton.ClientAccessToken) },
-            },
-            Content = new StringContent("{\"name\":\"test user\",\"sdkVersion\":\"3.3.0\"}")
-            {
-                Headers =
-                {
-                    ContentType = new MediaTypeHeaderValue("application/json")
-                }
-            }
-        };
-
-        using (var response = await client.SendAsync(request))
-        {
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-
-            clientVerify = JsonUtility.FromJson<ClientVerify>(body);
-        }
-
-        // Once your app is done using the HttpClient object call dispose to 
-        // free up system resources (the underlying socket and memory used for the object)
-        client.Dispose();
-
-        ConfigClient();
-    }
-
-    private async void ConfigClient()
-    {
-        HttpClient client = new HttpClient();
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri("https://telemetry.voxeet.com/api/v1/metrics/configuration"),
-            Headers =
-            {
-                { "Accept", "application/json,text/plain,*/*" },
-                { "Cache-Control", "no-cache" },
-                { "Authorization", String.Format("Bearer {0}", DolbyManager.Singleton.ClientAccessToken) },
-            },
-        };
-
-        using (var response = await client.SendAsync(request))
-        {
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-            Debug.Log(body);
-
-            //clientVerify = JsonUtility.FromJson<ClientVerify>(body);
-        }
-
-        // Once your app is done using the HttpClient object call dispose to 
-        // free up system resources (the underlying socket and memory used for the object)
-        client.Dispose();
-
-        //PutSessionTimestamp();
-    }
-
-    private async void PutSessionTimestamp()
-    {
-        long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-        string param = "{\"version\":\"1.0\",\"userId\":\"" + clientVerify.user_id + "\",\"timestamp\":" + milliseconds + ",\"metrics\":{\"name\":\"" + SystemInfo.deviceName + "\",\"os\":\"" + SystemInfo.operatingSystem + "\",\"timeZone\":\"UTC - 05:00\",\"sdkPlatform\":\"browser\",\"sdkVersion\":\"3.3.0\",\"uxkitVersion\":\"\",\"hardware\":{\"cpu\":\"\",\"ram\":6,\"screen\":\"1832x1920\"}}}";
-        HttpClient client = new HttpClient();
-        Debug.Log(param);
-
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Put,
-            RequestUri = new Uri(String.Format("https://telemetry.voxeet.com/api/v1/metrics/device/users/{0}/timestamp/{1}", clientVerify.user_id, milliseconds)),
-            Headers =
-            {
-                { "Accept", "application/json,text/plain,*/*" },
-                { "Cache-Control", "no-cache" },
-                { "Authorization", String.Format("Bearer {0}", DolbyManager.Singleton.ClientAccessToken) },
-            },
-            //Content = new StringContent("{\"version\":\"1.0\",\"userId\":\"" + clientVerify.user_id + "\",\"timestamp\":" + milliseconds + ",\"}")
-            //{
-            //    Headers =
-            //    {
-            //        ContentType = new MediaTypeHeaderValue("application/json")
-            //    }
-            //},
-        };
-
-        using (var response = await client.SendAsync(request))
-        {
-            //response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-            Debug.Log(body);
-
-            //clientVerify = JsonUtility.FromJson<ClientVerify>(body);
-        }
-
-        // Once your app is done using the HttpClient object call dispose to 
-        // free up system resources (the underlying socket and memory used for the object)
-        client.Dispose();
-    }
 }

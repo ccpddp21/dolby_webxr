@@ -1,11 +1,9 @@
 // ui.js
 const initUI = () => {
     //alert("Init");
-    joinConference();
 };
-const joinConference = () => {
-    let conferenceAlias = "testConference";
 
+const createConference = (conferenceAlias) => {
     /*
     1. Create a conference room with an alias
     2. Join the conference with its id
@@ -13,11 +11,18 @@ const joinConference = () => {
     VoxeetSDK.conference.create({ alias: conferenceAlias })
         .then((conference) => VoxeetSDK.conference.join(conference, {}))
         .then(() => {
+            alert("Created Conference");
+        })
+        .catch((err) => console.error(err));
+}
+
+const joinConference = (conferenceAlias) => {
+    VoxeetSDK.conference.fetch({ alias: conferenceAlias })
+        .then((conference) => VoxeetSDK.conference.join(conference, {}))
+        .then(() => {
             alert("Joined Conference");
         })
         .catch((err) => console.error(err));
-
-    
 };
 
 const leaveConference = () => {

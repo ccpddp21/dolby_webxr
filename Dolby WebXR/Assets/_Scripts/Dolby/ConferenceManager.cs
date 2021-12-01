@@ -37,7 +37,7 @@ public class ConferenceManager : MonoBehaviour
             Headers =
             {
                 { "Accept", "application/json" },
-                { "Authorization", String.Format("Bearer {0}", DolbyManager.Singleton.BearerAccessToken) }, // DolbyManager.Singleton.BearerAccessToken) },
+                { "Authorization", String.Format("Bearer {0}", DolbyRest.Singleton.BearerAccessToken) }, // DolbyManager.Singleton.BearerAccessToken) },
             },
             Content = new StringContent("{\"parameters\":{\"dolbyVoice\":true,\"liveRecording\":true},\"participants\":{\"<externalId>\":{\"permissions\":[\"JOIN\",\"SEND_AUDIO\"]}},\"ownerExternalId\":\"test\",\"alias\":\"testConference\"}")
             {
@@ -66,7 +66,7 @@ public class ConferenceManager : MonoBehaviour
             Headers =
             {
                 { "Accept", "application/json" },
-                { "Authorization", String.Format("Bearer {0}", DolbyManager.Singleton.ClientAccessToken) },
+                { "Authorization", String.Format("Bearer {0}", DolbyRest.Singleton.ClientAccessToken) },
             },
             Content = new StringContent("{\"user\": {\"type\":\"user\"}}")
             {
