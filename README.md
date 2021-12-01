@@ -75,3 +75,8 @@ Sonar Sound Studio is a WebXR application that is used with a WebXR-compatible w
 
 ## Known Issues
   - Dynamic furniture enabling based on Dolby conference state [host / listener / none] is broken in WebGL build
+
+## References
+- [Mozilla Reality WebXR](https://github.com/MozillaReality/unity-webxr-export)
+- [Unity WebGL: interacting with web browser scripts](https://docs.unity3d.com/Manual/webgl-interactingwithbrowserscripting.html)
+- [Dolby.io JavaScript SDK](https://docs.dolby.io/communications-apis/docs/getting-started-with-the-javascript-sdk)
