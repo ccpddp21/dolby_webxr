@@ -69,3 +69,6 @@ Sonar Sound Studio is a WebXR application that is used with a WebXR-compatible w
 7) Click [Build]
 8) Choose the 'public' folder of your dev server
 9) When complete, start your dev server and open your browser to served url
+
+## Known Issues
+  - Dynamic furniture enabling based on Dolby conference state [host / listener / none] is broken in WebGL build
