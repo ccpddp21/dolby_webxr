@@ -13,15 +13,15 @@ let randomName =
 const CKEY = "dQQMU2k2NjhwDWDOQzOuXQ==";
 const CSEC = "KHul95FKODp9CbV9J4smVVyNiIlyzpDROan-aJ9bo0w=";
 
-const main = async () => {
+const main = async (username) => {
     VoxeetSDK.initialize(CKEY, CSEC)
     try {
         // Open the session here !!!!
-        await VoxeetSDK.session.open({ name: randomName });
+        await VoxeetSDK.session.open({ name: username });
         initUI();
     } catch (e) {
         alert('Something went wrong : ' + e);
     }
 }
 
-main();
+//main();
